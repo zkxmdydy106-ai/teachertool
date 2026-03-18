@@ -162,8 +162,10 @@ export default function UploadPage() {
 
       logger.info("자료 업로드 완료", { resourceId })
       setSubmitResult("success")
-    } catch (err) {
+    } catch (err: any) {
       logger.error("업로드 실패", err)
+      console.error("[Upload Error Detailed]:", err)
+      alert(`업로드에 실패했습니다. 에러: ${err.message || '알 수 없는 오류'}`)
       setSubmitResult("error")
     } finally {
       setIsSubmitting(false)
