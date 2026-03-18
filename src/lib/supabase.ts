@@ -7,4 +7,9 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn("Supabase 환경 변수가 설정되지 않았습니다. .env.local 파일을 확인해주세요.")
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  global: {
+    // Next.js의 fetch 가로채기(intercept)로 인한 무한 로딩 버그(Promise Pending) 방지
+    fetch: (...args) => fetch(...args),
+  },
+})

@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { ShieldCheck, Clock, FileWarning, Download, ArrowUpRight, Link as LinkIcon, FileCheck, PlayCircle, Star } from "lucide-react"
 import { BookmarkButton } from "@/components/BookmarkButton"
+import Link from "next/link"
 
 export type ResourceStatus = "pending" | "approved" | "rejected" | "revision_requested" | "quarantined"
 
@@ -114,11 +115,11 @@ export function ResourceCard({ item, onBookmarkToggle }: ResourceCardProps) {
         {/* 제목 & 설명 */}
         <div>
           <h3 className="text-lg font-bold leading-snug text-[var(--color-text)] line-clamp-2 group-hover:text-blue-600 transition-colors pr-1">
-            <a href={`/resource/${item.id}`} className="flex items-start gap-1">
+            <Link href={`/resource/${item.id}`} className="flex items-start gap-1">
               <span className="absolute inset-0 z-0" />
               {item.title}
               <ArrowUpRight className="h-4 w-4 flex-shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity text-blue-500 relative z-10" />
-            </a>
+            </Link>
           </h3>
           <p className="mt-2 text-sm text-[var(--color-text-secondary)] line-clamp-3 leading-relaxed relative z-10">
             {item.description}
