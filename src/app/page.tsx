@@ -296,7 +296,7 @@ export default function Home() {
           </div>
           <div className="mt-8 md:order-1 md:mt-0">
             <p className="text-center text-xs leading-5 text-[var(--color-text-muted)]">
-              &copy; 2026 VibeT. All rights reserved. 나노바나나 교사용 플랫폼.
+              &copy; 2026 VibeT. All rights reserved. 교사 툴 공유 플랫폼.
             </p>
           </div>
         </div>

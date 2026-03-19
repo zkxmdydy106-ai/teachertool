@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Upload, Home, Shield, LogOut, Loader2, User as UserIcon, ChevronDown, Settings, Banana } from "lucide-react"
+import { Upload, Home, Shield, LogOut, Loader2, User as UserIcon, ChevronDown, Settings, Sparkles } from "lucide-react"
 import { useAuth } from "@/lib/auth-context"
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu"
 
@@ -23,10 +23,10 @@ export function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* 로고 */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-yellow-400 to-amber-500 text-white shadow-md shadow-amber-500/20">
-              <Banana className="h-5 w-5" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-md shadow-purple-500/20">
+              <Sparkles className="h-5 w-5" />
             </div>
-            <span className="text-xl font-extrabold text-[var(--color-text)] tracking-tight group-hover:text-amber-500 transition-colors">
+            <span className="text-xl font-extrabold text-[var(--color-text)] tracking-tight group-hover:text-purple-500 transition-colors">
               VibeT
             </span>
           </Link>
