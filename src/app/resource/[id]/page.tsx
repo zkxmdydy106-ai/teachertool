@@ -187,7 +187,7 @@ export default async function ResourceDetailPage({
                     <h2 className="text-xl font-bold mb-2 text-slate-800">외부 앱 / 스크립트 도구</h2>
                     <p className="text-sm text-slate-600 mb-6">아래 버튼을 클릭하여 해당 웹 도구를 바로 이용할 수 있습니다. (새 창으로 열람)</p>
                     <a 
-                        href={resource.external_url} 
+                        href={`/api/track-download?id=${resource.id}&url=${encodeURIComponent(resource.external_url)}`} 
                         target="_blank" 
                         rel="noreferrer"
                         className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-sm hover:bg-blue-500 hover:shadow-md transition-all active:scale-95"
@@ -206,7 +206,7 @@ export default async function ResourceDetailPage({
                     <h2 className="text-xl font-bold mb-2 text-slate-800">첨부 파일 다운로드</h2>
                     <p className="text-sm text-slate-600 mb-6">AI 바이러스 검증을 통과한 원본 파일을 다운로드 받을 수 있습니다.</p>
                     <a 
-                        href={downloadUrl} 
+                        href={`/api/track-download?id=${resource.id}&url=${encodeURIComponent(downloadUrl)}`} 
                         download
                         className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-8 py-4 text-base font-semibold text-white shadow-sm hover:bg-slate-800 hover:shadow-md transition-all active:scale-95"
                     >

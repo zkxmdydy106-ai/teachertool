@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { FileCheck, GraduationCap, ShieldCheck, TrendingUp } from "lucide-react"
+import { supabase } from "@/lib/supabase"
 
 /**
  * 통계 섹션 — 플랫폼 신뢰도를 숫자로 전달
@@ -41,9 +42,9 @@ const stats: Stat[] = [
   },
   {
     icon: <TrendingUp className="h-6 w-6" />,
-    value: 15000,
+    value: 0,
     suffix: "+",
-    label: "월간 다운로드",
+    label: "누적 다운로드",
     gradient: "from-amber-500 to-orange-500",
   },
 ]
@@ -102,6 +103,27 @@ function useCountUp(target: number, duration: number = 1500) {
 }
 
 export function StatsSection() {
+  const [realStats, setRealStats] = useState<Stat[]>(stats)
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const { data, error } = await supabase.rpc("get_site_stats")
+        if (!error && data) {
+          setRealStats([
+            { ...stats[0], value: data.resources || 0 },
+            { ...stats[1], value: data.users || 0 },
+            { ...stats[2] }, // 검증률은 고정
+            { ...stats[3], value: data.downloads || 0 }
+          ])
+        }
+      } catch (err) {
+        console.error("통계 로드 실패", err)
+      }
+    }
+    loadStats()
+  }, [])
+
   return (
     <section className="relative bg-[var(--color-bg-dark)] py-20 sm:py-24 overflow-hidden">
       {/* 배경 효과 */}
@@ -122,13 +144,13 @@ export function StatsSection() {
             <span className="text-gradient">신뢰와 성장</span>
           </h2>
           <p className="mt-4 text-slate-400 max-w-xl mx-auto">
-            교사들이 직접 만든 검증된 플랫폼, 그 가치를 확인하세요.
+            교사들이 직접 만든 검증된 플랫폼, 실제 데이터를 확인하세요.
           </p>
         </motion.div>
 
         {/* 통계 카드 그리드 */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat, index) => (
+          {realStats.map((stat, index) => (
             <StatCard key={stat.label} stat={stat} index={index} />
           ))}
         </div>

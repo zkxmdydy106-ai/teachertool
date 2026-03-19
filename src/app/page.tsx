@@ -8,6 +8,7 @@ import { StatsSection } from "@/components/StatsSection"
 import { ResourceCard, type ResourceItem } from "@/components/ResourceCard"
 import { Search } from "lucide-react"
 import { supabase } from "@/lib/supabase"
+import Link from "next/link"
 
 const logger = new Logger("Home")
 
@@ -26,26 +27,32 @@ export default function Home() {
         let formattedData: ResourceItem[] = []
 
         if (query) {
-          // 검색어가 있을 경우 RPC 기능 사용
-          const { data, error } = await supabase.rpc("match_resources", {
-            query_text: query,
-            match_count: 20
-          })
+          // 검색어가 있을 경우 ilike 기능 사용
+          const { data, error } = await supabase
+            .from("resources")
+            .select(`
+              id, title, description, status, risk_score, school_level, subject, resource_type, external_url, video_url, downloads,
+              resource_tags(tags(name))
+            `)
+            .in("status", ["approved", "pending"])
+            .or(`title.ilike.%${query}%,description.ilike.%${query}%`)
+            .order("created_at", { ascending: false })
+            .limit(20)
 
           if (error) throw error
 
-          // RPC 반환 데이터를 ResourceItem 형식으로 변환
+          // 데이터를 ResourceItem 형식으로 변환
           formattedData = (data || []).map((row: any) => ({
             id: row.id,
             title: row.title,
             description: row.description || "",
             status: row.status as ResourceItem["status"],
             riskScore: row.risk_score || 0,
-            tags: [], // RPC는 현재 tags를 조인하지 않으므로 빈 배열 처리 (필요시 RPC 수정 필요)
+            tags: row.resource_tags ? row.resource_tags.map((rt: any) => rt.tags?.name).filter(Boolean) : [],
             resourceType: row.resource_type || "file",
             externalUrl: row.external_url,
             videoUrl: row.video_url,
-            downloads: Math.floor(Math.random() * 500) + 10,
+            downloads: row.downloads || 0,
           }))
         } else {
         // 기본 로드 (최신 20개) - reviews 조인 제외 (테이블 관련 에러 방지)
@@ -71,7 +78,7 @@ export default function Home() {
           resourceType: row.resource_type,
           externalUrl: row.external_url,
           videoUrl: row.video_url,
-          downloads: Math.floor(Math.random() * 500) + 10,
+          downloads: row.downloads || 0,
           rating: 0,
           reviewCount: 0
         }))
@@ -146,7 +153,7 @@ export default function Home() {
           resourceType: row.resource_type,
           externalUrl: row.external_url,
           videoUrl: row.video_url,
-          downloads: Math.floor(Math.random() * 500) + 10,
+          downloads: row.downloads || 0,
           rating: 0,
           reviewCount: 0
         }))
@@ -180,11 +187,17 @@ export default function Home() {
 
         setFilteredResources(formattedData)
       } else {
-        // 검색어가 있으면 RPC 호출
-        const { data, error } = await supabase.rpc("match_resources", {
-          query_text: searchQuery,
-          match_count: 20
-        })
+        // 검색어가 있으면 ilike 호출
+        const { data, error } = await supabase
+          .from("resources")
+          .select(`
+            id, title, description, status, risk_score, school_level, subject, resource_type, external_url, video_url, downloads,
+            resource_tags(tags(name))
+          `)
+          .in("status", ["approved", "pending"])
+          .or(`title.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%`)
+          .order("created_at", { ascending: false })
+          .limit(20)
         
         if (error) throw error
         
@@ -195,11 +208,11 @@ export default function Home() {
           description: row.description || "",
           status: row.status as ResourceItem["status"],
           riskScore: row.risk_score || 0,
-          tags: [], 
+          tags: row.resource_tags ? row.resource_tags.map((rt: any) => rt.tags?.name).filter(Boolean) : [], 
           resourceType: row.resource_type || "file",
           externalUrl: row.external_url,
           videoUrl: row.video_url,
-          downloads: Math.floor(Math.random() * 500) + 10,
+          downloads: row.downloads || 0,
         }))
         setFilteredResources(formattedData)
       }
@@ -271,19 +284,19 @@ export default function Home() {
       <footer className="border-t border-[var(--color-border)] bg-[var(--color-bg-card)]">
         <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
           <div className="flex justify-center md:order-2 space-x-8">
-            <a href="#" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
+            <Link href="/terms" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
               이용약관
-            </a>
-            <a href="#" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
+            </Link>
+            <Link href="/security" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
               보안정책
-            </a>
-            <a href="#" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
+            </Link>
+            <Link href="/privacy" className="text-sm text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors">
               개인정보처리방침
-            </a>
+            </Link>
           </div>
           <div className="mt-8 md:order-1 md:mt-0">
             <p className="text-center text-xs leading-5 text-[var(--color-text-muted)]">
-              &copy; 2026 Antigravity. All rights reserved. 교사용 보안 플랫폼.
+              &copy; 2026 VibeT. All rights reserved. 나노바나나 교사용 플랫폼.
             </p>
           </div>
         </div>

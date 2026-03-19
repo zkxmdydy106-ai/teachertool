@@ -21,7 +21,7 @@ const notoSansKR = Noto_Sans_KR({
 });
 
 export const metadata: Metadata = {
-  title: "교사 툴 공유 플랫폼 | Antigravity",
+  title: "교사 툴 공유 플랫폼 | VibeT",
   description:
     "신뢰 가능한 교사 전용 교육 산출물 공유 및 AI 검증 마켓플레이스. 안전하고 검증된 양질의 교육 자료를 빠르게 검색·공유하세요.",
   keywords: ["교사", "교육자료", "산출물", "공유", "AI검증", "마켓플레이스"],

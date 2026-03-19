@@ -43,16 +43,7 @@ export function HeroSection({
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="flex-1 text-center lg:text-left"
           >
-            {/* 뱃지 */}
-            <div className="mb-6 flex justify-center lg:justify-start">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-500/10 px-3.5 py-1.5 text-sm font-medium text-blue-400 ring-1 ring-inset ring-blue-500/20 backdrop-blur-sm">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
-                </span>
-                Antigravity v1.0 — AI 검증 시스템 가동 중
-              </span>
-            </div>
+
 
             {/* 메인 헤드라인 */}
             <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl leading-[1.1]">
