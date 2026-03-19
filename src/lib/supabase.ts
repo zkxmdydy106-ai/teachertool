@@ -8,8 +8,8 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  global: {
-    // Next.js의 fetch 가로채기(intercept)로 인한 무한 로딩 버그(Promise Pending) 방지
-    fetch: (...args) => fetch(...args),
-  },
+  auth: {
+    // 변경된 브랜드명으로 스토리지 키를 새로 파서 기존 브라우저에 남아있던 고장난 Auth Lock 무한대기 현상 강제 해제
+    storageKey: 'vibet-auth-token',
+  }
 })

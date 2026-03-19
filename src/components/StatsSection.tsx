@@ -103,7 +103,7 @@ function useCountUp(target: number, duration: number = 1500) {
 }
 
 export function StatsSection() {
-  const [realStats, setRealStats] = useState<Stat[]>(stats)
+  const [realStats, setRealStats] = useState<Stat[]>(() => stats.map((s, i) => i === 2 ? s : { ...s, value: 0 }))
 
   useEffect(() => {
     async function loadStats() {
